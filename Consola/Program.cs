@@ -16,11 +16,13 @@ namespace Consola
             {
 
                 int legajoJuan = 1;
+                int legajoBergo = 2;
                 int codigoCobroNormal = 1;
                 int codigoCobroEspecial = 2;
                 int codigoCobroBloqueado= 3;
 
                 clienteNegocio.CrearCliente(legajoJuan, "Juan");
+                clienteNegocio.CrearCliente(legajoBergo, "Bergo");
 
                 cobroNegocio.CrearCobro(
                     codigoCobroNormal,
@@ -57,9 +59,23 @@ namespace Consola
                     TipoCobro.Normal
                 );
 
+                cobroNegocio.CrearCobro(
+                    4,
+                    DateTime.Now.AddDays(-10),
+                    7000,
+                    legajoBergo,
+                    TipoCobro.Normal
+                );
+
                 cobroNegocio.CancelarCobro(codigoCobroBloqueado, 2200);
+                cobroNegocio.CancelarCobro(4, 7700);
 
                 cobroNegocio.ObtenerGrilla4(legajoJuan, CriteriosOrdenamiento.MenorAMayor);
+
+                foreach (var item in cobroNegocio.ObtenerGrilla5())
+                {
+                    Console.WriteLine(item);
+                }
 
                 Console.WriteLine("Corrí feliz");
             }

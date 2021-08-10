@@ -5,6 +5,7 @@ namespace Consola.Dominio.Cobro
     {
         public int Codigo { get; set; }
         public DateTime FechaVencimiento { get; set; }
+        public DateTime FechaCancelacion { get; set; }
         public double Deuda { get; set; }
 
         public EstadoCobro Estado { get; set; }
@@ -20,7 +21,9 @@ namespace Consola.Dominio.Cobro
 
         public virtual double CalcularAdicional()
         {
-            int diasRetraso = (int)(DateTime.Now - FechaVencimiento).TotalDays;
+            DateTime fechaEjecucion = Estado == EstadoCobro.Cancelado ? FechaCancelacion : DateTime.Now;
+
+            int diasRetraso = (int)(fechaEjecucion - FechaVencimiento).TotalDays;
             if (diasRetraso > 0)
             {
                 double adicional = Deuda * ((FactorInteresPorMora * diasRetraso) / 100.0);

@@ -66,13 +66,13 @@ namespace Consola.Datos
         public void CrearCobro(Cobro nuevoCobro)
         {
             cobros.Add(nuevoCobro);
-            System.Console.WriteLine();
         }
 
         public void CancelarCobro(int codigoCobro)
         {
             int indiceCobro = cobros.FindIndex(c => c.Codigo == codigoCobro);
             cobros[indiceCobro].Estado = EstadoCobro.Cancelado;
+            cobros[indiceCobro].FechaCancelacion = DateTime.Now;
         }
 
         public int ObtenerCantidadCobrosPendientesPorCliente(int legajo)
@@ -86,17 +86,26 @@ namespace Consola.Datos
             return cobros.Where(c => c.Estado == EstadoCobro.Cancelado && c.Cliente == legajo).ToList();
         }
 
-        //  LINQ -- Usamos Where
+        //  LINQ para filtrar. Utilizamos IComparable para poder utilizar el sort
         public List<Cobro> ObtenerListadoGrilla4(int legajo, CriteriosOrdenamiento criterio)
         {
-
-            List<Cobro> cancelados = cobros.Where(c => c.Estado == EstadoCobro.Cancelado && c.Cliente == legajo).ToList();
+            List<Cobro> cancelados = ObtenerListadoGrilla3(legajo);
 
             cancelados.Sort();
             // Ordeno siempre, si lo quiero de menor a mayor, lo invierto
             if (criterio == CriteriosOrdenamiento.MenorAMayor) cancelados.Reverse();
 
             return cancelados;
+        }
+
+        public List<object> ObtenerListadoGrilla5()
+        {
+            var listaTiposAnonimos = cobros.Where(c => c.Estado == EstadoCobro.Cancelado).Select(co => new {
+                nombreCompleto = clientes.Find(c => c.Legajo == co.Cliente).Nombre,
+                totalCancelado = co.CalcularImportePorAbonar().ImporteTotal,
+            });
+
+            return listaTiposAnonimos.ToList<object>();
         }
     }
 }

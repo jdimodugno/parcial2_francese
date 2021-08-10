@@ -59,10 +59,22 @@ namespace Consola.Negocio
             repo.CancelarCobro(codigoCobro);
         }
 
+        public List<Cobro> ObtenerGrilla3(int legajo)
+        {
+            Repositorio repo = Repositorio.ObtenerInstacia();
+            return repo.ObtenerListadoGrilla3(legajo);
+        }
+
         public List<Cobro> ObtenerGrilla4(int legajo, CriteriosOrdenamiento criterio)
         {
             Repositorio repo = Repositorio.ObtenerInstacia();
             return repo.ObtenerListadoGrilla4(legajo, criterio);
+        }
+
+        public List<object> ObtenerGrilla5()
+        {
+            Repositorio repo = Repositorio.ObtenerInstacia();
+            return repo.ObtenerListadoGrilla5();
         }
 
         private bool ClienteYaPoseeMaximoCobrosPendientes(int legajo) {
